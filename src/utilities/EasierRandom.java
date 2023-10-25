@@ -1,3 +1,4 @@
+package utilities;
 /**
  * The EasierRandom class provides methods for generating random numbers or random integers within a specified range.
  * It includes both traditional random number generation using java.util.Random and more efficient thread-safe alternatives using ThreadLocalRandom.
