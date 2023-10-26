@@ -121,12 +121,12 @@ public class FileUtilities {
 	/**
 	 * Reads the content of a text file.
 	 *
-	 * @param inputPath Path of the text file to read.
+	 * @param inputFilePath Path of the text file to read.
 	 * @return The content of the text file, or an empty string if there's an error.
 	 */
-	public static String readFromTextFile(String inputPath) {
+	public static String readFromTextFile(String inputFilePath) {
 		try {
-			BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputPath)));
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFilePath)));
 			String result = "";
 			String tmp;
 			try {
@@ -146,14 +146,25 @@ public class FileUtilities {
 	}
 
 	/**
+	 * Overloaded method to read from a text file using a File object.
+	 *
+	 * @param inputFile File object representing the text file to read.
+	 * @return The content of the text file, or an empty string if there's an error.
+	 */
+	public static String readFromTextFile(File inputFile) {
+		return readFromTextFile(inputFile.getAbsolutePath());
+	}
+
+	/**
 	 * Writes text to a text file.
 	 *
-	 * @param outputPath  Path of the text file to write.
-	 * @param textToWrite Text to write to the file.
+	 * @param outputFilePath Path of the text file to write.
+	 * @param textToWrite    Text to write to the file.
 	 */
-	public static void writeToTextFile(String outputPath, String textToWrite) {
+	public static void writeToTextFile(String outputFilePath, String textToWrite) {
 		try {
-			BufferedWriter outputStream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputPath)));
+			BufferedWriter outputStream = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(outputFilePath)));
 			try {
 				outputStream.write(textToWrite);
 				outputStream.close();
@@ -169,14 +180,24 @@ public class FileUtilities {
 	}
 
 	/**
+	 * Overloaded method to write to a text file using a File object.
+	 *
+	 * @param outputFile  File object representing the text file to write.
+	 * @param textToWrite Text to write to the file.
+	 */
+	public static void writeToTextFile(File outputFile, String textToWrite) {
+		writeToTextFile(outputFile.getAbsolutePath(), textToWrite);
+	}
+
+	/**
 	 * Reads the content of a binary file.
 	 *
-	 * @param inputPath Path of the binary file to read.
+	 * @param inputFilePath Path of the binary file to read.
 	 * @return The content of the binary file, or null if there's an error.
 	 */
-	public static byte[] readFromFile(String inputPath) {
+	public static byte[] readFromFile(String inputFilePath) {
 		try {
-			BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputPath));
+			BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputFilePath));
 			byte[] result = new byte[inputStream.available()];
 			result = inputStream.readAllBytes();
 			inputStream.close();
@@ -189,14 +210,24 @@ public class FileUtilities {
 	}
 
 	/**
+	 * Overloaded method to read from a binary file using a File object.
+	 *
+	 * @param inputFile File object representing the binary file to read.
+	 * @return The content of the binary file, or null if there's an error.
+	 */
+	public static byte[] readFromFile(File inputFile) {
+		return readFromFile(inputFile.getAbsolutePath());
+	}
+
+	/**
 	 * Writes data to a binary file.
 	 *
-	 * @param outputPath Path of the binary file to write.
-	 * @param data       Data to write to the file.
+	 * @param outputFilePath Path of the binary file to write.
+	 * @param data           Data to write to the file.
 	 */
-	public static void writeToFile(String outputPath, byte[] data) {
+	public static void writeToFile(String outputFilePath, byte[] data) {
 		try {
-			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputPath));
+			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFilePath));
 			outputStream.write(data);
 			outputStream.close();
 		} catch (IOException e) {
@@ -205,34 +236,64 @@ public class FileUtilities {
 	}
 
 	/**
+	 * Overloaded method to write to a binary file using a File object.
+	 *
+	 * @param outputFile File object representing the binary file to write.
+	 * @param data       Data to write to the file.
+	 */
+	public static void writeToFile(File outputFile, byte[] data) {
+		writeToFile(outputFile.getAbsoluteFile(), data);
+	}
+
+	/**
 	 * Duplicates the content of a text file to another file.
 	 *
-	 * @param inputPath  Path of the source text file.
-	 * @param outputPath Path of the destination text file.
+	 * @param inputFilePath  Path of the source text file.
+	 * @param outputFilePath Path of the destination text file.
 	 */
-	public static void duplicateTextFile(String inputPath, String outputPath) {
-		writeToTextFile(outputPath, readFromTextFile(inputPath));
+	public static void duplicateTextFile(String inputFilePath, String outputFilePath) {
+		writeToTextFile(outputFilePath, readFromTextFile(inputFilePath));
+	}
+
+	/**
+	 * Overloaded method to duplicate a text file using File objects.
+	 *
+	 * @param inputFile  File object representing the source text file.
+	 * @param outputFile File object representing the destination text file.
+	 */
+	public static void duplicateTextFile(File inputFile, File outputFile) {
+		duplicateTextFile(inputFile.getAbsoluteFile(), outputFile.getAbsoluteFile());
 	}
 
 	/**
 	 * Duplicates the content of a binary file to another file.
 	 *
-	 * @param inputPath  Path of the source file.
-	 * @param outputPath Path of the destination file.
+	 * @param inputFilePath  Path of the source file.
+	 * @param outputFilePath Path of the destination file.
 	 */
-	public static void duplicateFile(String inputPath, String outputPath) {
-		writeToFile(outputPath, readFromFile(inputPath));
+	public static void duplicateFile(String inputFilePath, String outputFilePath) {
+		writeToFile(outputFilePath, readFromFile(inputFilePath));
+	}
+
+	/**
+	 * Overloaded method to duplicate a binary file using File objects.
+	 *
+	 * @param inputFile  File object representing the source file.
+	 * @param outputFile File object representing the destination file.
+	 */
+	public static void duplicateFile(File inputFile, File outputFile) {
+		duplicateFile(inputFile.getAbsoluteFile(), outputFile.getAbsoluteFile());
 	}
 
 	/**
 	 * Counts the number of lines in a text file.
 	 *
-	 * @param inputPath Path of the text file to count lines from.
+	 * @param inputFilePath Path of the text file to count lines from.
 	 * @return The number of lines in the text file, or -1 if there's an error.
 	 */
-	public static int countLines(String inputPath) {
+	public static int countLines(String inputFilePath) {
 		try {
-			BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputPath)));
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFilePath)));
 			int count = 0;
 			while ((inputReader.readLine()) != null) {
 				count++;
@@ -245,4 +306,13 @@ public class FileUtilities {
 		}
 	}
 
+	/**
+	 * Overloaded method to count lines in a text file using a File object.
+	 *
+	 * @param inputFile File object representing the text file to count lines from.
+	 * @return The number of lines in the text file, or -1 if there's an error.
+	 */
+	public static int countLines(File inputFile) {
+		return countLines(inputFile.getAbsolutePath());
+	}
 }
