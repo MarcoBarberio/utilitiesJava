@@ -1,5 +1,6 @@
 package utilities;
-import java.io.File;
+
+import java.io.*;
 
 /**
  * Utility class for file management. Provides methods to check the existence of
@@ -116,4 +117,132 @@ public class FileUtilities {
 	public static boolean isBinaryFile(String filePath) {
 		return getExtension(filePath).equals(".dat");
 	}
+
+	/**
+	 * Reads the content of a text file.
+	 *
+	 * @param inputPath Path of the text file to read.
+	 * @return The content of the text file, or an empty string if there's an error.
+	 */
+	public static String readFromTextFile(String inputPath) {
+		try {
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputPath)));
+			String result = "";
+			String tmp;
+			try {
+				while ((tmp = inputReader.readLine()) != null) {
+					result += tmp;
+				}
+				inputReader.close();
+				return result;
+			} catch (IOException e) {
+				System.out.println("IO exception");
+				return "";
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("Can't read from file. It doesn't exist");
+			return "";
+		}
+	}
+
+	/**
+	 * Writes text to a text file.
+	 *
+	 * @param outputPath  Path of the text file to write.
+	 * @param textToWrite Text to write to the file.
+	 */
+	public static void writeToTextFile(String outputPath, String textToWrite) {
+		try {
+			BufferedWriter outputStream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputPath)));
+			try {
+				outputStream.write(textToWrite);
+				outputStream.close();
+			} catch (IOException e) {
+				System.out.println("IO exception");
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.println("Can't read from file. It doesn't exist");
+		} catch (SecurityException e) {
+			System.out.println("Can't access to the file");
+		}
+	}
+
+	/**
+	 * Reads the content of a binary file.
+	 *
+	 * @param inputPath Path of the binary file to read.
+	 * @return The content of the binary file, or null if there's an error.
+	 */
+	public static byte[] readFromFile(String inputPath) {
+		try {
+			BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inputPath));
+			byte[] result = new byte[inputStream.available()];
+			result = inputStream.readAllBytes();
+			inputStream.close();
+			return result;
+
+		} catch (IOException e) {
+			System.out.println("IO exception");
+		}
+		return null;
+	}
+
+	/**
+	 * Writes data to a binary file.
+	 *
+	 * @param outputPath Path of the binary file to write.
+	 * @param data       Data to write to the file.
+	 */
+	public static void writeToFile(String outputPath, byte[] data) {
+		try {
+			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputPath));
+			outputStream.write(data);
+			outputStream.close();
+		} catch (IOException e) {
+			System.out.println("IO Exception");
+		}
+	}
+
+	/**
+	 * Duplicates the content of a text file to another file.
+	 *
+	 * @param inputPath  Path of the source text file.
+	 * @param outputPath Path of the destination text file.
+	 */
+	public static void duplicateTextFile(String inputPath, String outputPath) {
+		writeToTextFile(outputPath, readFromTextFile(inputPath));
+	}
+
+	/**
+	 * Duplicates the content of a binary file to another file.
+	 *
+	 * @param inputPath  Path of the source file.
+	 * @param outputPath Path of the destination file.
+	 */
+	public static void duplicateFile(String inputPath, String outputPath) {
+		writeToFile(outputPath, readFromFile(inputPath));
+	}
+
+	/**
+	 * Counts the number of lines in a text file.
+	 *
+	 * @param inputPath Path of the text file to count lines from.
+	 * @return The number of lines in the text file, or -1 if there's an error.
+	 */
+	public static int countLines(String inputPath) {
+		try {
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputPath)));
+			int count = 0;
+			while ((inputReader.readLine()) != null) {
+				count++;
+			}
+			inputReader.close();
+			return count;
+		} catch (IOException e) {
+			System.out.println("IOException");
+			return -1;
+		}
+	}
+
 }
