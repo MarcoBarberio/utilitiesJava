@@ -131,7 +131,7 @@ public class FileUtilities {
 			String tmp;
 			try {
 				while ((tmp = inputReader.readLine()) != null) {
-					result += tmp;
+					result += tmp+"\n";
 				}
 				inputReader.close();
 				return result;
